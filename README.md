@@ -54,7 +54,7 @@ We welcome contributions from the community! If you have any feature requests, b
 
 ## License
 
-The Herogi WordPress Plugin is licensed under the [GPL License](https://en.wikipedia.org/wiki/GNU_General_Public_License).
+The Herogi WordPress Plugin is licensed under the [GPLv2 License](https://en.wikipedia.org/wiki/GNU_General_Public_License).
 
 ## Disclaimer
 
