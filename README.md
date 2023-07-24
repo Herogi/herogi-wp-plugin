@@ -56,10 +56,4 @@ We welcome contributions from the community! If you have any feature requests, b
 
 License: GPLv2 or later
 
-## Disclaimer
 
-The Herogi WordPress Plugin is provided as-is, without any warranty or guarantee. Use it at your own risk.
-
----
-
-*Note: The URLs and links provided in this readme are placeholders and should be replaced with the actual URLs and links related to the Herogi WordPress Plugin.*
