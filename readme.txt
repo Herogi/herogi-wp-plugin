@@ -1,8 +1,16 @@
-# Herogi WordPress Plugin
+=== Herogi - Customer Engagement, Marketing Automation, Omni Channel Messaging ===
+Contributors: herogi
+Tags: marketing automation,customer engagement,email marketing,email,push,sms,woocommerce marketing 
+Requires at least: 6.0
+Tested up to: 6.2
+Stable tag: 1.0.0
+Requires PHP: 7.0
+License: GPLv2 or later
+License URI: https://raw.githubusercontent.com/Herogi/herogi-wp-plugin/master/LICENSE
 
-<img src="https://herogi.com/wp-content/uploads/2022/12/herogi-LOGO-BP03B-final-rev.png" alt="Herogi Logo" width="200" height="auto">
+Here is a short description of the plugin.  This should be no more than 150 characters.  No markup here.
 
-## Description
+== Description ==
 
 The Herogi WordPress Plugin is a powerful tool that seamlessly integrates the Herogi customer engagement and customer data platform into your WordPress website. With this plugin, you can effortlessly gather valuable insights about your website visitors' behavior, enabling you to understand their interactions, preferences, and actions on your site.
 
@@ -36,30 +44,16 @@ The Herogi WordPress Plugin is a powerful tool that seamlessly integrates the He
 
 7. Start leveraging the power of Herogi's rich marketing automation features and WooCommerce support to engage with your customers effectively.
 
-## Requirements
+== Changelog ==
 
-- An active Herogi account. Don't have one? Sign up at [https://www.herogi.com](https://www.herogi.com).
+= 1.0.0 =
+* A change since the previous version.
+* Another change.
 
-- WordPress 5.0 or higher.
+= 0.5 =
+* List versions from most recent at top to oldest at bottom.
 
-- WooCommerce (for WooCommerce support).
+== Upgrade Notice ==
 
-## Support
-
-For any issues, questions, or feedback regarding the Herogi WordPress Plugin, please visit our support page at [https://www.herogi.com/support](https://www.herogi.com/support).
-
-## Contributing
-
-We welcome contributions from the community! If you have any feature requests, bug fixes, or improvements, please submit a pull request on our GitHub repository at [https://github.com/herogi/wordpress-plugin](https://github.com/herogi/wordpress-plugin).
-
-## License
-
-License: GPLv2 or later
-
-## Disclaimer
-
-The Herogi WordPress Plugin is provided as-is, without any warranty or guarantee. Use it at your own risk.
-
----
-
-*Note: The URLs and links provided in this readme are placeholders and should be replaced with the actual URLs and links related to the Herogi WordPress Plugin.*
+= v1.0.0 =
+Initial version upload
