@@ -22,7 +22,7 @@ The Herogi WordPress Plugin is a powerful tool that seamlessly integrates the He
 
 ## Installation
 
-1. Download the Herogi WordPress Plugin from the [WordPress Plugin Repository](https://wordpress.org/plugins/herogi/).
+1. Download the Herogi WordPress Plugin from the [WordPress Plugin Repository](https://wordpress.org/plugins/herogi/) or manually from [here](https://github.com/Herogi/herogi-wp-plugin/releases/tag/v1.0.0).
 
 2. Upload the plugin files to the `/wp-content/plugins/herogi` directory, or install the plugin directly through the WordPress dashboard.
 
