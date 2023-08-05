@@ -1,5 +1,6 @@
 
 var trackOptions = [];
+var locationTracking = false;
 
 if(herogi_options.herogi_click_tracking_enabled == 'on') {
     trackOptions.push(["trackClick", {}]);
@@ -9,11 +10,15 @@ if(herogi_options.herogi_pageload_tracking_enabled == 'on') {
     trackOptions.push(["trackPageLoad", {}]);
 }
 
+if(herogi_options.herogi_location_tracking_enabled == 'on') {
+    locationTracking = true;
+}
+
 
 herogi.setConf(trackOptions);
 
 if(herogi_options.herogi_api_key != '' && herogi_options.herogi_api_secret != '') {
-    herogi.init(herogi_options.herogi_api_key, herogi_options.herogi_api_secret, true);
+    herogi.init(herogi_options.herogi_api_key, herogi_options.herogi_api_secret, locationTracking);
 
     herogi.identify(null, null, null, function (res, d) {
         console.log(res);

@@ -1,6 +1,10 @@
 <?php
 
 
+function isWCInstalled() {
+    return class_exists('WooCommerce');
+}
+
 function getCategories($product) {
 
     // Get the product category IDs
@@ -90,6 +94,10 @@ function retrieve_product_details() {
 
 add_action('wp_footer', 'order_received_js_script');
 function order_received_js_script() {
+
+    if(!isWCInstalled())
+        return;
+
     // Only on order received" (thankyou)
     if( ! is_wc_endpoint_url('order-received') )
         return; // Exit
@@ -216,6 +224,9 @@ function order_received_js_script() {
 }
 
 function track_product_view() {
+
+    if(!isWCInstalled())
+        return;
 
     if (is_product()) {
 
