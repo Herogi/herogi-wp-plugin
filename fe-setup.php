@@ -4,7 +4,7 @@
 // Enqueue frontend JavaScript
 function herogi_enqueue_tracking_scripts() {
     // Enqueue your script file
-    wp_enqueue_script('tracking-frontend', plugins_url('assets/js/tracking.js', __FILE__), array('jquery', 'herogi-js'), '1.0', true);
+    wp_enqueue_script('tracking-frontend', plugins_url('assets/js/tracking.js', __FILE__), array('jquery', 'herogi-js'), '1.0.0', true);
     
     // Pass plugin options to the frontend script
     $plugin_options = array(
@@ -21,7 +21,7 @@ function herogi_enqueue_tracking_scripts() {
 add_action('wp_enqueue_scripts', 'herogi_enqueue_tracking_scripts');
 
 
-function enqueue_remote_script() {
+function herogi_enqueue_remote_script() {
   
     $enable_scripts = get_option('herogi_push_notification_enabled');
 
@@ -36,19 +36,4 @@ function enqueue_remote_script() {
     }
   
 }
-add_action( 'wp_enqueue_scripts', 'enqueue_remote_script');
-
-
-function custom_js_plugin_script() {
-  ob_start();
-  ?>
-  <script type="text/javascript">
-      jQuery(document).ready(function($) {
-      });
-
-  </script>
-  <?php
-  echo ob_get_clean();
-}
-
-add_action( 'wp_footer', 'custom_js_plugin_script' );
+add_action( 'wp_enqueue_scripts', 'herogi_enqueue_remote_script');

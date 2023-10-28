@@ -1,10 +1,10 @@
 === Herogi - Customer Engagement, Marketing Automation, Omni Channel Messaging ===
 Contributors: herogi
-Tags: marketing automation,customer engagement,email marketing,email,push,sms,woocommerce marketing 
-Requires at least: 6.0
-Tested up to: 6.2
+Tags: marketing automation,customer engagement,email marketing,email,push,sms,woocommerce marketing
 Stable tag: 1.0.0
-Requires PHP: 7.0
+Requires at least: 6.0
+Tested up to: 6.3
+Requires PHP: 8.2
 License: GPLv2 or later
 License URI: https://raw.githubusercontent.com/Herogi/herogi-wp-plugin/master/LICENSE
 

@@ -80,7 +80,7 @@ jQuery(document).ready(function($) {
         }
 
         var payloadData = {};
-        payloadData["action"] = "retrieve_product_details";
+        payloadData["action"] = "herogi_retrieve_product_details";
         payloadData["product_id"] = productId;
 
         if(variationId !== undefined && variationId !== null && variationId !== "") {

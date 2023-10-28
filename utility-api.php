@@ -5,7 +5,7 @@ function isWCInstalled() {
     return class_exists('WooCommerce');
 }
 
-function getCategories($product) {
+function hgGetCategories($product) {
 
     // Get the product category IDs
     $category_ids = $product->get_category_ids();
@@ -32,19 +32,16 @@ function getCategories($product) {
 }
 
 // Register the AJAX action
-add_action('wp_ajax_retrieve_product_details', 'retrieve_product_details');
-add_action('wp_ajax_nopriv_retrieve_product_details', 'retrieve_product_details'); // For non-logged-in users
+add_action('wp_ajax_herogi_retrieve_product_details', 'herogi_retrieve_product_details');
+add_action('wp_ajax_nopriv_herogi_retrieve_product_details', 'herogi_retrieve_product_details'); // For non-logged-in users
 
-function retrieve_product_details() {
+function herogi_retrieve_product_details() {
   // Get the product ID from the AJAX request
-  $product_id = isset($_POST['product_id']) ? $_POST['product_id'] : '';
-  $variation_id = isset($_POST['variation_id']) ? $_POST['variation_id'] : 0;
+  $product_id = absint($_POST['product_id']);
+  $variation_id = absint($_POST['variation_id']);
 
   if ($product_id) {
     // Retrieve the product details based on the product ID
-    // Modify this part to match your specific implementation for retrieving product details
-
-    // Example: Retrieve product details from WooCommerce
     $product = wc_get_product($product_id);
     $cart = WC()->cart;
 
@@ -52,7 +49,6 @@ function retrieve_product_details() {
 
         $requested_quantity = 0;
         
-
         // Iterate through cart items
         foreach ($cart->get_cart() as $cart_item_key => $cart_item) {
             if ($cart_item['product_id'] == $product_id && $cart_item['variation_id'] == $variation_id) {
@@ -80,7 +76,7 @@ function retrieve_product_details() {
         'imageUrl' => $image_url,
         'productUrl' => $product->get_permalink(),
         'productDescription' => wp_strip_all_tags($product->get_description()),
-        'categories' => getCategories($product)
+        'categories' => hgGetCategories($product)
       );
 
       // Return the product details as a JSON response
@@ -92,8 +88,8 @@ function retrieve_product_details() {
   wp_send_json_error('Product details could not be retrieved.');
 }
 
-add_action('wp_footer', 'order_received_js_script');
-function order_received_js_script() {
+add_action('wp_footer', 'herogi_order_received_js_script');
+function herogi_order_received_js_script() {
 
     if(!isWCInstalled())
         return;
@@ -102,7 +98,7 @@ function order_received_js_script() {
     if( ! is_wc_endpoint_url('order-received') )
         return; // Exit
 
-    $order_id = absint( get_query_var('order-received') ); // Get the order ID
+    $order_id = absint(get_query_var('order-received') ); // Get the order ID
 
     if( get_post_type( $order_id ) !== 'shop_order' ) {
         return; // Exit
@@ -151,18 +147,18 @@ function order_received_js_script() {
 
         $image_id = $product->get_image_id();
         $image_url = wp_get_attachment_image_url($image_id, 'full');   
-        $catFlatten = getCategories($product);
+        $catFlatten = hgGetCategories($product);
 
         $product_data = array(
-            'id' => $product->get_id(),
+            'id' => absint($product->get_id()),
             'name' => $item->get_name(),
             'total' => $item->get_total(),
             'subtotal' => $item->get_subtotal(),
             'currency' => get_woocommerce_currency(),
             'quantity' => $item->get_quantity(), // Assuming a quantity of 1 for the added product
             'variationId' => $item->get_variation_id(),
-            'imageUrl' => $image_url,
-            'productUrl' => $product->get_permalink(),
+            'imageUrl' => esc_url($image_url),
+            'productUrl' => esc_url($product->get_permalink()),
             'productDescription' => wp_strip_all_tags($product->get_description()),
             'categories' => $catFlatten
         );
@@ -173,7 +169,6 @@ function order_received_js_script() {
 
     // Add the products array to the order data
     $order_data['products'] = $products;
-    
     $json_data = json_encode($order_data);
 
     ?>
@@ -182,9 +177,6 @@ function order_received_js_script() {
     jQuery( function($) { 
         // Trigger a function (example)
         var order =  <?php echo $json_data; ?>;
-
-        console.log('Order Details:');
-        console.log(order);
 
         var customerData = {
             'email': order.customer_email,
@@ -223,7 +215,7 @@ function order_received_js_script() {
     <?php
 }
 
-function track_product_view() {
+function herogi_track_product_view() {
 
     if(!isWCInstalled())
         return;
@@ -231,16 +223,16 @@ function track_product_view() {
     if (is_product()) {
 
         global $product;
-        $product_id = $product->get_id();
+        $product_id = absint($product->get_id());
         $name = $product->get_name();
         $price = $product->get_price();
         $regularPrice = $product->get_regular_price() ? $product->get_regular_price() : $price;
         $currency = get_woocommerce_currency();
         $image_url = wp_get_attachment_image_url($product->get_image_id(), 'full');
-        $imageUrl = $image_url;
-        $productUrl = $product->get_permalink();
+        $imageUrl = esc_url($image_url);
+        $productUrl = esc_url($product->get_permalink());
         $productDescription = wp_strip_all_tags($product->get_description());
-        $categories = getCategories($product);
+        $categories = hgGetCategories($product);
         
         ?>
         <script type="text/javascript">
@@ -274,4 +266,4 @@ function track_product_view() {
         <?php
     }
 }
-add_action('wp_footer', 'track_product_view');
+add_action('wp_footer', 'herogi_track_product_view');

@@ -4,11 +4,16 @@
  * Plugin Name: Herogi
  * Plugin URI: https://herogi.com
  * Description: Herogi Customer Engagement Platform plugin for WordPress
- * Version: 1.0.0
  * Author: Herogi Ltd.
+ * Version: 1.0.0
+ * Requires at least: 6.0
+ * Tested up to: 6.3
+ * Requires PHP: 8.2
+ * License: GPLv2 or later
+ * License URI: https://raw.githubusercontent.com/Herogi/herogi-wp-plugin/master/LICENSE
  */
 
-function my_custom_admin_menu() {
+function herogi_admin_menu() {
 
     // Add a new menu item to the admin sidebar
     add_menu_page(
@@ -42,7 +47,7 @@ function my_custom_admin_menu() {
     
 }
 
-add_action('admin_menu', 'my_custom_admin_menu');
+add_action('admin_menu', 'herogi_admin_menu');
 
 function herogi_main_menu_content() {
     ?>
