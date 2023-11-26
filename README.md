@@ -2,6 +2,8 @@
 
 <img src="https://herogi.com/wp-content/uploads/2022/12/herogi-LOGO-BP03B-final-rev.png" alt="Herogi Logo" width="200" height="auto">
 
+Easy to use official WordPress plugin from Herogi for WordPress users to increase their customer outreach. 
+
 ## Description
 
 The Herogi WordPress Plugin is a powerful tool that seamlessly integrates the Herogi customer engagement and customer data platform into your WordPress website. With this plugin, you can effortlessly gather valuable insights about your website visitors' behavior, enabling you to understand their interactions, preferences, and actions on your site.
@@ -38,15 +40,25 @@ The Herogi WordPress Plugin is a powerful tool that seamlessly integrates the He
 
 ## Requirements
 
-- An active Herogi account. Don't have one? Sign up at [https://www.herogi.com](https://www.herogi.com).
+- An active Herogi account. Don't have one? Sign up at [https://herogi.com](https://herogi.com).
 
-- WordPress 5.0 or higher.
+- WordPress 6.0 or higher.
 
 - WooCommerce (for WooCommerce support).
 
+## Service Information
+
+Our plugin relies on [Herogi](https://herogi.com) for client-side event tracking. Herogi tracks various client-side events, including but not limited to page views, clicks, logins, registrations, product views, add to cart, abandoned cart, and order completions or customly configured events to capture specific user interactions.
+
+## Data Usage
+
+- **When:** Herogi is utilized to track client-side events whenever a relevant user action occurs within our plugin. For example, when a user logs in, registers, adds items to the cart, or completes an order, Herogi tracks and records these events.
+- **Data Sent:** Herogi collects data related to these events, including event type, user ID, timestamp, and any additional information related to the event.
+- **Data Handling:** The data collected by Herogi is subject to our [Privacy Policy](https://herogi.com/privacy-policy). Please review our Privacy Policy to understand how client-side event data is handled.
+
 ## Support
 
-For any issues, questions, or feedback regarding the Herogi WordPress Plugin, please visit our support page at [https://www.herogi.com/support](https://www.herogi.com/support).
+For any issues, questions, or feedback regarding the Herogi WordPress Plugin, please visit our support page at [https://learn.herogi.com/](https://learn.herogi.com/).
 
 ## Contributing
 

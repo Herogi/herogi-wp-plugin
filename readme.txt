@@ -8,13 +8,13 @@ Requires PHP: 8.2
 License: GPLv2 or later
 License URI: https://raw.githubusercontent.com/Herogi/herogi-wp-plugin/master/LICENSE
 
-Here is a short description of the plugin.  This should be no more than 150 characters.  No markup here.
+Easy to use official WordPress plugin from Herogi for WordPress users to increase their customer outreach. 
 
 == Description ==
 
 The Herogi WordPress Plugin is a powerful tool that seamlessly integrates the Herogi customer engagement and customer data platform into your WordPress website. With this plugin, you can effortlessly gather valuable insights about your website visitors' behavior, enabling you to understand their interactions, preferences, and actions on your site.
 
-## Features
+== Features ==
 
 - **Client-Side Event Tracking:** Herogi tracks various client-side events, such as page views, clicks, logins, registrations, product views, add to cart, abandoned cart, and order completions. You can even set up custom event tracking to capture specific user interactions.
 
@@ -28,7 +28,7 @@ The Herogi WordPress Plugin is a powerful tool that seamlessly integrates the He
 
 - **WooCommerce Support:** The Herogi plugin fully integrates with WooCommerce, providing advanced customer insights and automation capabilities tailored for e-commerce businesses. Track product views, add to cart events, abandoned carts, and completed orders to optimize your WooCommerce store's performance.
 
-## Installation
+== Installation ==
 
 1. Download the Herogi WordPress Plugin from the [WordPress Plugin Repository](https://wordpress.org/plugins/herogi/).
 
@@ -44,16 +44,33 @@ The Herogi WordPress Plugin is a powerful tool that seamlessly integrates the He
 
 7. Start leveraging the power of Herogi's rich marketing automation features and WooCommerce support to engage with your customers effectively.
 
+== Requirements ==
+
+- An active Herogi account. Don't have one? Sign up at [https://herogi.com](https://herogi.com).
+
+- WordPress 6.0 or higher.
+
+- WooCommerce (for WooCommerce features).
+
+== Service Information ==
+
+Our plugin relies on [Herogi](https://herogi.com) for client-side event tracking. Herogi tracks various client-side events, including but not limited to page views, clicks, logins, registrations, product views, add to cart, abandoned cart, and order completions or customly configured events to capture specific user interactions.
+
+== Data Usage ==
+
+- **When:** Herogi is utilized to track client-side events whenever a relevant user action occurs within our plugin. For example, when a user logs in, registers, adds items to the cart, or completes an order, Herogi tracks and records these events.
+- **Data Sent:** Herogi collects data related to these events, including event type, user ID, timestamp, and any additional information related to the event.
+- **Data Handling:** The data collected by Herogi is subject to our [Privacy Policy](https://herogi.com/privacy-policy). Please review our Privacy Policy to understand how client-side event data is handled.
+
+== Support ==
+
+For any issues, questions, or feedback regarding the Herogi WordPress Plugin, please visit our support page at [https://learn.herogi.com/](https://learn.herogi.com/).
+
+== Contributing ==
+
+We welcome contributions from the community! If you have any feature requests, bug fixes, or improvements, please submit a pull request on our GitHub repository at [https://github.com/herogi/wordpress-plugin](https://github.com/herogi/wordpress-plugin).
+
 == Changelog ==
-
-= 1.0.0 =
-* A change since the previous version.
-* Another change.
-
-= 0.5 =
-* List versions from most recent at top to oldest at bottom.
-
-== Upgrade Notice ==
 
 = v1.0.0 =
 Initial version upload

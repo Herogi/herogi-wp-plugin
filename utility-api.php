@@ -1,11 +1,15 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) exit;
 
-function isWCInstalled() {
+
+function herogiWCCheck()
+{
     return class_exists('WooCommerce');
 }
 
-function hgGetCategories($product) {
+function herogiGetCategories($product)
+{
 
     // Get the product category IDs
     $category_ids = $product->get_category_ids();
@@ -23,7 +27,7 @@ function hgGetCategories($product) {
                 'slug' => $category->slug,
                 'description' => $category->description
             );
-            
+
             $catFlatten[] = $c;
         }
     }
@@ -35,79 +39,87 @@ function hgGetCategories($product) {
 add_action('wp_ajax_herogi_retrieve_product_details', 'herogi_retrieve_product_details');
 add_action('wp_ajax_nopriv_herogi_retrieve_product_details', 'herogi_retrieve_product_details'); // For non-logged-in users
 
-function herogi_retrieve_product_details() {
-  // Get the product ID from the AJAX request
-  $product_id = absint($_POST['product_id']);
-  $variation_id = absint($_POST['variation_id']);
+function herogi_retrieve_product_details()
+{
 
-  if ($product_id) {
-    // Retrieve the product details based on the product ID
-    $product = wc_get_product($product_id);
-    $cart = WC()->cart;
+    if (isset($_POST['security']) && wp_verify_nonce($_POST['security'], 'herogi_retrieve_product_details')) {
 
-    if ($product) {
+        // Get the product ID from the AJAX request
+        $product_id = absint($_POST['product_id']);
+        $variation_id = absint($_POST['variation_id']);
 
-        $requested_quantity = 0;
-        
-        // Iterate through cart items
-        foreach ($cart->get_cart() as $cart_item_key => $cart_item) {
-            if ($cart_item['product_id'] == $product_id && $cart_item['variation_id'] == $variation_id) {
-                $requested_quantity = $cart_item['quantity'];
-                $variation_id = $cart_item['variation_id'];
-                break;
-            } else if ($cart_item['product_id'] == $product_id && $variation_id == 0) {
-                $requested_quantity = $cart_item['quantity'];
-                break;
+        if ($product_id) {
+            // Retrieve the product details based on the product ID
+            $product = wc_get_product($product_id);
+            $cart = WC()->cart;
+
+            if ($product) {
+
+                $requested_quantity = 0;
+
+                // Iterate through cart items
+                foreach ($cart->get_cart() as $cart_item_key => $cart_item) {
+                    if ($cart_item['product_id'] == $product_id && $cart_item['variation_id'] == $variation_id) {
+                        $requested_quantity = $cart_item['quantity'];
+                        $variation_id = $cart_item['variation_id'];
+                        break;
+                    } else if ($cart_item['product_id'] == $product_id && $variation_id == 0) {
+                        $requested_quantity = $cart_item['quantity'];
+                        break;
+                    }
+                }
+
+                $image_id = $product->get_image_id();
+                $image_url = wp_get_attachment_image_url($image_id, 'full');
+
+
+                $product_details = array(
+                    'id' => $product->get_id(),
+                    'name' => wp_strip_all_tags($product->get_name()),
+                    'price' => $product->get_price(),
+                    'regularPrice' => $product->get_regular_price() ? $product->get_regular_price() : $product->get_price(),
+                    'currency' => get_woocommerce_currency(),
+                    'quantity' => $requested_quantity, // Assuming a quantity of 1 for the added product
+                    'variationId' => $variation_id,
+                    'imageUrl' => esc_url($image_url),
+                    'productUrl' => esc_url($product->get_permalink()),
+                    'productDescription' => wp_strip_all_tags($product->get_short_description()),
+                    'categories' => herogiGetCategories($product)
+                );
+
+                // Return the product details as a JSON response
+                wp_send_json($product_details);
             }
-        }   
+        }
 
-        $image_id = $product->get_image_id();
-        $image_url = wp_get_attachment_image_url($image_id, 'full');
-        
-       
-      $product_details = array(
-        'id' => $product->get_id(),
-        'name' => $product->get_name(),
-        'price' => $product->get_price(),
-        'regularPrice' => $product->get_regular_price() ? $product->get_regular_price() : $product->get_price(),
-        'currency' => get_woocommerce_currency(),
-        'quantity' => $requested_quantity, // Assuming a quantity of 1 for the added product
-        'variationId' => $variation_id,
-        'imageUrl' => $image_url,
-        'productUrl' => $product->get_permalink(),
-        'productDescription' => wp_strip_all_tags($product->get_description()),
-        'categories' => hgGetCategories($product)
-      );
-
-      // Return the product details as a JSON response
-      wp_send_json($product_details);
+        // If product details retrieval fails or product ID is not provided
+        wp_send_json_error('Product details could not be retrieved.');
+    } else {
+        wp_send_json_error('Invalid security token sent.');
     }
-  }
-
-  // If product details retrieval fails or product ID is not provided
-  wp_send_json_error('Product details could not be retrieved.');
 }
 
 add_action('wp_footer', 'herogi_order_received_js_script');
-function herogi_order_received_js_script() {
+function herogi_order_received_js_script()
+{
 
-    if(!isWCInstalled())
+    if (!herogiWCCheck())
         return;
 
     // Only on order received" (thankyou)
-    if( ! is_wc_endpoint_url('order-received') )
+    if (!is_wc_endpoint_url('order-received'))
         return; // Exit
 
-    $order_id = absint(get_query_var('order-received') ); // Get the order ID
+    $order_id = absint(get_query_var('order-received')); // Get the order ID
 
-    if( get_post_type( $order_id ) !== 'shop_order' ) {
+    if (get_post_type($order_id) !== 'shop_order') {
         return; // Exit
     }
 
-    $order = wc_get_order( $order_id ); // Get the WC_Order Object
+    $order = wc_get_order($order_id); // Get the WC_Order Object
 
     // Only for processing orders
-    if ( method_exists( $order, 'has_status') && ! $order->has_status( 'processing' ) ) {
+    if (method_exists($order, 'has_status') && !$order->has_status('processing')) {
         return; // Exit
     }
 
@@ -136,22 +148,22 @@ function herogi_order_received_js_script() {
     $order_data["customer_postcode"] = $order->get_billing_postcode();
     $order_data["customer_country"] = $order->get_billing_country();
     $order_data["customer_phone"] = $order->get_billing_phone();
-    
+
     $products = array();
 
     foreach ($items as $item) {
-        
+
         $product_id = $item->get_product_id();
         $product = wc_get_product($product_id);
 
 
         $image_id = $product->get_image_id();
-        $image_url = wp_get_attachment_image_url($image_id, 'full');   
-        $catFlatten = hgGetCategories($product);
+        $image_url = wp_get_attachment_image_url($image_id, 'full');
+        $catFlatten = herogiGetCategories($product);
 
         $product_data = array(
             'id' => absint($product->get_id()),
-            'name' => $item->get_name(),
+            'name' => wp_strip_all_tags($item->get_name()),
             'total' => $item->get_total(),
             'subtotal' => $item->get_subtotal(),
             'currency' => get_woocommerce_currency(),
@@ -159,10 +171,10 @@ function herogi_order_received_js_script() {
             'variationId' => $item->get_variation_id(),
             'imageUrl' => esc_url($image_url),
             'productUrl' => esc_url($product->get_permalink()),
-            'productDescription' => wp_strip_all_tags($product->get_description()),
+            'productDescription' => wp_strip_all_tags($product->get_short_description()),
             'categories' => $catFlatten
         );
-        
+
         // Add product data to the products array
         $products[] = $product_data;
     }
@@ -173,88 +185,88 @@ function herogi_order_received_js_script() {
 
     ?>
     <script>
-    // Once DOM is loaded
-    jQuery( function($) { 
-        // Trigger a function (example)
-        var order =  <?php echo $json_data; ?>;
+        // Once DOM is loaded
+        jQuery(function ($) {
+            // Trigger a function (example)
+            var order = <?php echo $json_data; ?>;
 
-        var customerData = {
-            'email': order.customer_email,
-            'firstname': order.customer_first_name,
-            'lastname': order.customer_last_name,
-            'city': order.customer_city,
-            'country': order.customer_country,
-            'mobileNo': order.customer_phone
-        };
+            var customerData = {
+                'email': order.customer_email,
+                'firstname': order.customer_first_name,
+                'lastname': order.customer_last_name,
+                'city': order.customer_city,
+                'country': order.customer_country,
+                'mobileNo': order.customer_phone
+            };
 
-        if(order.customer_id == 0) {
-            herogi.identify(customerData, null, null, function(response) {
-                console.log(response);
+            if (order.customer_id == 0) {
+                herogi.identify(customerData, null, null, function (response) {
+                    console.log(response);
+                });
+            } else {
+                herogi.identify(order.customer_id.toString(), null, null, function (response) {
+                    console.log(response);
+                });
+            }
+
+            herogi.trackCustom('Order', {
+                'order_id': order.order_id.toString(),
+                'cart_data': JSON.stringify(order.products),
+                'cart_total': order.total.toString(),
+                'cart_subtotal': order.sub_total.toString(),
+                'total_tax': order.total_tax.toString(),
+                'total_shipping': order.total_shipping.toString(),
+                'total_fees': order.total_fees.toString(),
+                'total_discount': order.total_discount.toString(),
+                'payment_method': order.payment_method.toString(),
+                'currency': order.currency.toString()
             });
-        } else {
-            herogi.identify(order.customer_id.toString(), null, null, function(response) {
-                console.log(response);
-            });
-        }
-       
-        herogi.trackCustom('Order', {
-            'order_id': order.order_id.toString(),
-            'cart_data': JSON.stringify(order.products),
-            'cart_total': order.total.toString(),
-            'cart_subtotal': order.sub_total.toString(),
-            'total_tax': order.total_tax.toString(),
-            'total_shipping': order.total_shipping.toString(),
-            'total_fees': order.total_fees.toString(),
-            'total_discount': order.total_discount.toString(),
-            'payment_method': order.payment_method.toString(),
-            'currency': order.currency.toString()
+
         });
-        
-    });
     </script>
     <?php
 }
 
-function herogi_track_product_view() {
+function herogi_track_product_view()
+{
 
-    if(!isWCInstalled())
+    if (!herogiWCCheck())
         return;
 
     if (is_product()) {
 
         global $product;
-        $product_id = absint($product->get_id());
+        $product_id = $product->get_id();
         $name = $product->get_name();
         $price = $product->get_price();
         $regularPrice = $product->get_regular_price() ? $product->get_regular_price() : $price;
         $currency = get_woocommerce_currency();
-        $image_url = wp_get_attachment_image_url($product->get_image_id(), 'full');
-        $imageUrl = esc_url($image_url);
-        $productUrl = esc_url($product->get_permalink());
-        $productDescription = wp_strip_all_tags($product->get_description());
-        $categories = hgGetCategories($product);
-        
+        $imageUrl = wp_get_attachment_image_url($product->get_image_id(), 'full');
+        $productUrl = $product->get_permalink();
+        $productDescription = wp_strip_all_tags($product->get_short_description());
+        $categories = herogiGetCategories($product);
+
         ?>
         <script type="text/javascript">
 
-            var productId = <?php echo $product_id; ?>;
-            var productName = "<?php echo $name; ?>";
-            var productPrice = <?php echo $price; ?>;
-            var regularPrice = <?php echo $regularPrice; ?>;
-            var currency = "<?php echo $currency; ?>";
-            var imageUrl = "<?php echo $imageUrl; ?>";
-            var permalink = "<?php echo $productUrl; ?>";
+            var productId = <?php echo absint($product_id); ?>;
+            var productName = "<?php echo wp_strip_all_tags($name); ?>";
+            var productPrice = <?php echo esc_html($price); ?>;
+            var regularPrice = <?php echo esc_html($regularPrice); ?>;
+            var currency = "<?php echo wp_strip_all_tags($currency); ?>";
+            var imageUrl = "<?php echo esc_url($imageUrl); ?>";
+            var permalink = "<?php echo esc_url($productUrl); ?>";
             var description = "<?php echo esc_js($productDescription); ?>";
-            var categories = <?php echo json_encode($categories); ?>;
+            var categories = <?php echo wp_json_encode($categories); ?>;
 
-            jQuery(function($) {
+            jQuery(function ($) {
 
                 herogi.trackCustom('ProductView', {
                     'product_id': productId.toString(),
                     'name': productName,
                     'price': productPrice.toString(),
                     'regular_price': regularPrice.toString(),
-                    'currency' : currency.toString(),
+                    'currency': currency.toString(),
                     'product_url': permalink,
                     'image_url': imageUrl,
                     'description': description,

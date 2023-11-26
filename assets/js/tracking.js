@@ -81,6 +81,7 @@ jQuery(document).ready(function($) {
 
         var payloadData = {};
         payloadData["action"] = "herogi_retrieve_product_details";
+        payloadData["security"] = herogi_options.herogi_ajax_nonce;
         payloadData["product_id"] = productId;
 
         if(variationId !== undefined && variationId !== null && variationId !== "") {

@@ -1,5 +1,7 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) exit;
+
 /*
  * Plugin Name: Herogi
  * Plugin URI: https://herogi.com
@@ -15,6 +17,8 @@
 
 function herogi_admin_menu() {
 
+    $icon_url = plugin_dir_url(__FILE__) . 'assets/favicon.png';
+
     // Add a new menu item to the admin sidebar
     add_menu_page(
         'Herogi Customer Engagement', // Page title
@@ -22,7 +26,7 @@ function herogi_admin_menu() {
         'manage_options', // Capability required to access the page
         'herogi-menu', // Menu slug
         'herogi_main_menu_content', // Callback function to render the page
-        'https://beta.herogi.com/favicon.png', // Icon slug
+        $icon_url, // Icon slug
         50
     );
 
@@ -53,7 +57,12 @@ function herogi_main_menu_content() {
     ?>
     <div class="wrap">
         <h2>Herogi Dashboard</h2>
-        <iframe src="https://beta.herogi.com" style="width:100%; height:calc(100vh - 120px); border:none;"></iframe>
+        <!-- <iframe src="https://beta.herogi.com" style="width:100%; height:calc(100vh - 120px); border:none;"></iframe> -->
+         <div>
+            <p>To access your Herogi dashboard, please visit <a href="https://beta.herogi.com?utm_source=wordpress&utm_medium=plugin&utm_campaign=dashboard" target="_blank">https://beta.herogi.com</a> and login with your Herogi credentials.</p>
+            <p>If you don't have a Herogi account, you can register for free by clicking the button below.</p>
+            <button class="button button-primary" onclick="window.open('https://beta.herogi.com/register?utm_source=wordpress&utm_medium=plugin&utm_campaign=dashboard', '_blank')">Register</button>
+        </div>   
     </div>
     <?php
 }

@@ -1,5 +1,6 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) exit;
 
 // Enqueue frontend JavaScript
 function herogi_enqueue_tracking_scripts() {
@@ -14,9 +15,12 @@ function herogi_enqueue_tracking_scripts() {
         'herogi_location_tracking_enabled' => get_option('herogi_location_tracking_enabled'),
         'herogi_click_tracking_enabled' => get_option('herogi_click_tracking_enabled'),
         'herogi_pageload_tracking_enabled' => get_option('herogi_pageload_tracking_enabled'),
+        'herogi_ajax_nonce' => wp_create_nonce('herogi_retrieve_product_details')
     );
 
     wp_localize_script('tracking-frontend', 'herogi_options', $plugin_options);
+
+
 }
 add_action('wp_enqueue_scripts', 'herogi_enqueue_tracking_scripts');
 
@@ -36,4 +40,5 @@ function herogi_enqueue_remote_script() {
     }
   
 }
+
 add_action( 'wp_enqueue_scripts', 'herogi_enqueue_remote_script');
