@@ -181,14 +181,13 @@ function herogi_order_received_js_script()
 
     // Add the products array to the order data
     $order_data['products'] = $products;
-    $json_data = json_encode($order_data);
 
     ?>
     <script>
         // Once DOM is loaded
         jQuery(function ($) {
             // Trigger a function (example)
-            var order = <?php echo $json_data; ?>;
+            var order = <?php echo wp_json_encode($order_data); ?>;
 
             var customerData = {
                 'email': order.customer_email,
@@ -250,10 +249,10 @@ function herogi_track_product_view()
         <script type="text/javascript">
 
             var productId = <?php echo absint($product_id); ?>;
-            var productName = "<?php echo wp_strip_all_tags($name); ?>";
+            var productName = "<?php echo esc_html(wp_strip_all_tags($name)); ?>";
             var productPrice = <?php echo esc_html($price); ?>;
             var regularPrice = <?php echo esc_html($regularPrice); ?>;
-            var currency = "<?php echo wp_strip_all_tags($currency); ?>";
+            var currency = "<?php echo esc_html($currency); ?>";
             var imageUrl = "<?php echo esc_url($imageUrl); ?>";
             var permalink = "<?php echo esc_url($productUrl); ?>";
             var description = "<?php echo esc_js($productDescription); ?>";
