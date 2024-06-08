@@ -18,7 +18,29 @@ if(herogi_options.herogi_location_tracking_enabled == 'on') {
 herogi.setConf(trackOptions);
 
 if(herogi_options.herogi_api_key != '' && herogi_options.herogi_api_secret != '') {
-    herogi.init(herogi_options.herogi_api_key, herogi_options.herogi_api_secret, locationTracking);
+
+    var trackingDomain = herogi_options.herogi_tracking_domain ? herogi_options.herogi_tracking_domain : null;
+
+    if(herogi_options.herogi_api_url != '') {
+        herogi.init({
+            appId: herogi_options.herogi_api_key,
+            appSecret: herogi_options.herogi_api_secret,
+            proxyUrl: herogi_options.herogi_api_url,
+            trackingDomain: trackingDomain
+        }, {
+            locationSubscribe : locationTracking
+        });
+    } else {
+        herogi.init({
+            appId: herogi_options.herogi_api_key,
+            appSecret: herogi_options.herogi_api_secret,
+            trackingDomain: trackingDomain
+        }, {
+            locationSubscribe : locationTracking
+        });
+    }
+
+    //herogi.init(herogi_options.herogi_api_key, herogi_options.herogi_api_secret, locationTracking);
 
     herogi.identify(null, null, null, function (res, d) {
         console.log(res);

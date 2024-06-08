@@ -11,6 +11,8 @@ function herogi_enqueue_tracking_scripts() {
     $plugin_options = array(
         'herogi_api_key' => get_option('herogi_api_key'),
         'herogi_api_secret' => get_option('herogi_api_secret'),
+        'herogi_tracking_domain' => get_option('herogi_tracking_domain'),
+        'herogi_api_url' => get_option('herogi_api_url'),
         'herogi_push_notification_enabled' => get_option('herogi_push_notification_enabled'),
         'herogi_location_tracking_enabled' => get_option('herogi_location_tracking_enabled'),
         'herogi_click_tracking_enabled' => get_option('herogi_click_tracking_enabled'),
@@ -28,15 +30,16 @@ add_action('wp_enqueue_scripts', 'herogi_enqueue_tracking_scripts');
 function herogi_enqueue_remote_script() {
   
     $enable_scripts = get_option('herogi_push_notification_enabled');
+    $cdn_url = get_option('herogi_sdk_url');
 
     // Check if the option value is true
     if ( $enable_scripts == 'on') {
         // Enqueue the service-worker.js file
         wp_enqueue_script( 'herogi-serviceworker-js', '/service-worker.js', array(), '1.0', true );
         // Enqueue the herogi.min.js file, with 'herogi-serviceworker-js' as a dependency
-        wp_enqueue_script( 'herogi-js', 'https://cdn.herogi.com/herogi.min.js', array( 'herogi-serviceworker-js' ), '1.0', true );
+        wp_enqueue_script( 'herogi-js', $cdn_url, array( 'herogi-serviceworker-js' ), null, true );
     } else {
-        wp_enqueue_script( 'herogi-js', 'https://cdn.herogi.com/herogi.min.js', array(), '1.0', true );
+        wp_enqueue_script( 'herogi-js', $cdn_url, array(), null, true );
     }
   
 }

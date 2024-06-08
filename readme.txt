@@ -1,7 +1,7 @@
 === Herogi - Customer Engagement, Marketing Automation, Omni Channel Messaging ===
 Contributors: herogi
 Tags: marketing automation,customer engagement,email marketing,email,push,sms,woocommerce marketing
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 Requires at least: 6.0
 Tested up to: 6.3
 Requires PHP: 8.2
@@ -71,6 +71,9 @@ For any issues, questions, or feedback regarding the Herogi WordPress Plugin, pl
 We welcome contributions from the community! If you have any feature requests, bug fixes, or improvements, please submit a pull request on our GitHub repository at [https://github.com/herogi/wordpress-plugin](https://github.com/herogi/wordpress-plugin).
 
 == Changelog ==
+
+= v1.1.0 =
+Added support for proxying SDK requests. This will help to solve Safari Intelligent Tracking Prevention (ITP) concerns. Now user cookies are first party cookies which helps to track safari customers for 3 years. Originally it was limited to 7 days. 
 
 = v1.0.0 =
 Initial version upload
